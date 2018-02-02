@@ -1,9 +1,19 @@
 require("dotenv").config();
 var keys = require("./keys.js");
 
-// Following two variables return undefined
-var spotify = new Spotify(keys.spotify);
+// Twitter API Set-up
+var Twitter = require('twitter');
 var client = new Twitter(keys.twitter);
+// client.get(paths, params, callback);
+// client.post(path, params, callback);
+// client.stream(path, params, callback);
+
+// Spotify API Set-up
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
+// (Second line continues from first)
+//search: function({ type: 'artist OR album OR track', 
+//query: 'My search query', limit: 20 }, callback);
 
 var command = process.argv[2];
 var params = process.argv[3];
