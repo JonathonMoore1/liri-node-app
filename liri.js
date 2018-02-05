@@ -26,8 +26,20 @@ switch (command) {
         test();
         break;
 
-    case "twitter":
-        twitter();
+    case "my-tweets":
+        runTwitter();
+        break;
+    
+    case "spotify-this-song":
+        runSpotify();
+        break;
+
+    case "movie-this":
+        runOMDB();
+        break;
+    
+    case "do-what-it-says":
+        fooBar();
         break;
 }
 
@@ -35,16 +47,30 @@ function test() {
     console.log("Switch works");
 }
 
-function twitter() {
-    var queryURL = "https://api.twitter.com/1.1/search/tweets.json"
-
-    request(queryURL, function(error, response, body) {
-        if (!error && response.statusCode === 200) {
-            console.log(response);
+function runTwitter() {
+    var params = {screen_name: 'therealunclejo'};
+    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+        if (!error) {
+            console.log(tweets);
         }
-    })
+    });
 }
+
+function runSpotify() {
+    var userInput = process.argv[3];
+    spotify.search({ type: 'track', query: userInput + "" }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+        console.log(data);
+    })    
+}
+
+function runOMDB() {
+    
+}
+
+// console.log(client);
 // Example Request
 // GET https://api.twitter.com/1.1/search/tweets.json?q=%23freebandnames
-// &since_id=24012619984051000&max_id=250126199840518145
-// &result_type=mixed&count=4
+// &result_type=recent&count=20
