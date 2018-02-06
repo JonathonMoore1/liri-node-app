@@ -20,6 +20,7 @@ var command = process.argv[2];
 // var params = process.argv[3];
 
 var request = require("request");
+var fs = require("fs");
 
 switch (command) {
 
@@ -48,7 +49,7 @@ function test() {
     console.log("Switch works");
 }
 
-function runTwitter() {
+function runTwitter() {   
     var params = {screen_name: 'therealunclejo'};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
@@ -62,26 +63,27 @@ function runTwitter() {
     });
 }
 
-function runSpotify() {
-    
+function runSpotify() {   
     var songName = "";
     for (i = 3; i < nodeArgs.length; i++) {
         if (i > 3 && i < nodeArgs.length) {
-            songName = songName + nodeArgs[i] + "+" + nodeArgs[i];
+            songName = songName + "+" + nodeArgs[i];
         } else {
             songName += nodeArgs[i];
         }
     }
 
     spotify.search({ type: 'track', query: songName, limit: 1}, function(err, data) {
+       
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-        
-        var artistPath = JSON.stringify(data.tracks.items[0].album.artists[0].name, null, 2);
-        var songPath = JSON.stringify(data.tracks.items[0].name);
-        var albumPath = JSON.stringify(data.tracks.items[0].album.name);
-        var previewPath = JSON.stringify(data.tracks.items[0].preview_url);
+
+        var mainPath = data.tracks.items[0];
+        var artistPath = JSON.stringify(mainPath.album.artists[0].name, null, 2);
+        var songPath = JSON.stringify(mainPath.name);
+        var albumPath = JSON.stringify(mainPath.album.name);
+        var previewPath = JSON.stringify(mainPath.preview_url);
 
         console.log(JSON.stringify(data, null, 2));
         console.log("\n============================================\n");
@@ -102,8 +104,8 @@ function runOMDB() {
             movieName += nodeArgs[i];
         }
     }
+
     var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-    // console.log(queryURL);
     request(queryURL, function(error, response, body) {
 
         var data = JSON.parse(body);
@@ -118,215 +120,37 @@ function runOMDB() {
         console.log("\nPlot summary: " + data.Plot);
         console.log("\nStarring: " + data.Actors);
         console.log("\n============================================\n");
-        
     })
 }
 
+function fooBar() {
+    fs.readFile('random.txt', 'utf8', function(err, data) {
+        if (err) {
+            return console.log("Error occurred: " + err);
+        }
 
-// {
-//     "tracks": {
-//         "href": "https://api.spotify.com/v1/search?query=californication&type=track&offset=0&limit=1",
-//             "items": [
-//                 {
-//                     "album": {
-//                         "album_type": "album",
-//                         "artists": [
-//                             {
-//                                 "external_urls": {
-//                                     "spotify": "https://open.spotify.com/artist/0L8ExT028jH3ddEcZwqJJ5"
-//                                 },
-//                                 "href": "https://api.spotify.com/v1/artists/0L8ExT028jH3ddEcZwqJJ5",
-//                                 "id": "0L8ExT028jH3ddEcZwqJJ5",
-//                                 "name": "Red Hot Chili Peppers",
-//                                 "type": "artist",
-//                                 "uri": "spotify:artist:0L8ExT028jH3ddEcZwqJJ5"
-//                             }
-//                         ],
-//                         "available_markets": [
-//                             "AD",
-//                             "AR",
-//                             "AT",
-//                             "AU",
-//                             "BE",
-//                             "BG",
-//                             "BO",
-//                             "BR",
-//                             "CA",
-//                             "CH",
-//                             "CL",
-//                             "CO",
-//                             "CR",
-//                             "CY",
-//                             "CZ",
-//                             "DE",
-//                             "DK",
-//                             "DO",
-//                             "EC",
-//                             "EE",
-//                             "ES",
-//                             "FI",
-//                             "FR",
-//                             "GB",
-//                             "GR",
-//                             "GT",
-//                             "HK",
-//                             "HN",
-//                             "HU",
-//                             "ID",
-//                             "IE",
-//                             "IS",
-//                             "IT",
-//                             "JP",
-//                             "LT",
-//                             "LU",
-//                             "LV",
-//                             "MC",
-//                             "MT",
-//                             "MX",
-//                             "MY",
-//                             "NI",
-//                             "NL",
-//                             "NO",
-//                             "NZ",
-//                             "PA",
-//                             "PE",
-//                             "PH",
-//                             "PL",
-//                             "PT",
-//                             "PY",
-//                             "SE",
-//                             "SG",
-//                             "SK",
-//                             "SV",
-//                             "TH",
-//                             "TR",
-//                             "TW",
-//                             "US",
-//                             "UY"
-//                         ],
-//                         "external_urls": {
-//                             "spotify": "https://open.spotify.com/album/2Y9IRtehByVkegoD7TcLfi"
-//                         },
-//                         "href": "https://api.spotify.com/v1/albums/2Y9IRtehByVkegoD7TcLfi",
-//                         "id": "2Y9IRtehByVkegoD7TcLfi",
-//                         "images": [
-//                             {
-//                                 "height": 640,
-//                                 "url": "https://i.scdn.co/image/260c7a6da14bb13a4cc9e75bf5b549fb87fa22a9",
-//                                 "width": 640
-//                             },
-//                             {
-//                                 "height": 300,
-//                                 "url": "https://i.scdn.co/image/6f98acc4da4eb86ca2f9ebae5f8f173e59c5abef",
-//                                 "width": 300
-//                             },
-//                             {
-//                                 "height": 64,
-//                                 "url": "https://i.scdn.co/image/2da4d0271d9e4b1f37fd6c195e671d77ed61ca8f",
-//                                 "width": 64
-//                             }
-//                         ],
-//                         "name": "Californication (Deluxe Version)",
-//                         "type": "album",
-//                         "uri": "spotify:album:2Y9IRtehByVkegoD7TcLfi"
-//                     },
-//                     "artists": [
-//                         {
-//                             "external_urls": {
-//                                 "spotify": "https://open.spotify.com/artist/0L8ExT028jH3ddEcZwqJJ5"
-//                             },
-//                             "href": "https://api.spotify.com/v1/artists/0L8ExT028jH3ddEcZwqJJ5",
-//                             "id": "0L8ExT028jH3ddEcZwqJJ5",
-//                             "name": "Red Hot Chili Peppers",
-//                             "type": "artist",
-//                             "uri": "spotify:artist:0L8ExT028jH3ddEcZwqJJ5"
-//                         }
-//                     ],
-//                     "available_markets": [
-//                         "AD",
-//                         "AR",
-//                         "AT",
-//                         "AU",
-//                         "BE",
-//                         "BG",
-//                         "BO",
-//                         "BR",
-//                         "CA",
-//                         "CH",
-//                         "CL",
-//                         "CO",
-//                         "CR",
-//                         "CY",
-//                         "CZ",
-//                         "DE",
-//                         "DK",
-//                         "DO",
-//                         "EC",
-//                         "EE",
-//                         "ES",
-//                         "FI",
-//                         "FR",
-//                         "GB",
-//                         "GR",
-//                         "GT",
-//                         "HK",
-//                         "HN",
-//                         "HU",
-//                         "ID",
-//                         "IE",
-//                         "IS",
-//                         "IT",
-//                         "JP",
-//                         "LT",
-//                         "LU",
-//                         "LV",
-//                         "MC",
-//                         "MT",
-//                         "MX",
-//                         "MY",
-//                         "NI",
-//                         "NL",
-//                         "NO",
-//                         "NZ",
-//                         "PA",
-//                         "PE",
-//                         "PH",
-//                         "PL",
-//                         "PT",
-//                         "PY",
-//                         "SE",
-//                         "SG",
-//                         "SK",
-//                         "SV",
-//                         "TH",
-//                         "TR",
-//                         "TW",
-//                         "US",
-//                         "UY"
-//                     ],
-//                     "disc_number": 1,
-//                     "duration_ms": 329733,
-//                     "explicit": false,
-//                     "external_ids": {
-//                         "isrc": "USWB19900690"
-//                     },
-//                     "external_urls": {
-//                         "spotify": "https://open.spotify.com/track/48UPSzbZjgc449aqz8bxox"
-//                     },
-//                     "href": "https://api.spotify.com/v1/tracks/48UPSzbZjgc449aqz8bxox",
-//                     "id": "48UPSzbZjgc449aqz8bxox",
-//                     "name": "Californication",
-//                     "popularity": 84,
-//                     "preview_url": "https://p.scdn.co/mp3-preview/175ce440229d2fb5361756f3e68c9647b86a8eee?cid=3cb790a4b5f84a2aa5b96fef6f43531f",
-//                     "track_number": 6,
-//                     "type": "track",
-//                     "uri": "spotify:track:48UPSzbZjgc449aqz8bxox"
-//                 }
-//             ],
-//                 "limit": 1,
-//                     "next": "https://api.spotify.com/v1/search?query=californication&type=track&offset=1&limit=1",
-//                         "offset": 0,
-//                             "previous": null,
-//                                 "total": 473
-//     }
-// }
+        var dataArr = data.split(',');
+        var songName = dataArr[1];
+
+        spotify.search({ type: 'track', query: songName, limit: 1}, function(err, data) {
+       
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+    
+            var mainPath = data.tracks.items[0];
+            var artistPath = JSON.stringify(mainPath.album.artists[0].name, null, 2);
+            var songPath = JSON.stringify(mainPath.name);
+            var albumPath = JSON.stringify(mainPath.album.name);
+            var previewPath = JSON.stringify(mainPath.preview_url);
+    
+            //console.log(JSON.stringify(data, null, 2));
+            console.log("\n============================================\n");
+            console.log("\nTrack title: " + songPath);
+            console.log("\nArtist: " + artistPath);
+            console.log("\nAlbum: " + albumPath);
+            console.log("\nSpotify preview: " + previewPath);
+            console.log("\n============================================\n");
+        });
+    })
+}
