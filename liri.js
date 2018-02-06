@@ -51,23 +51,27 @@ function runTwitter() {
     var params = {screen_name: 'therealunclejo'};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
-            console.log(tweets);
+            for (i = 0; i < tweets.length; i++) {
+                console.log(tweets[i].created_at);
+                console.log(tweets[i].text);
+            }
         }
     });
 }
 
 function runSpotify() {
-    var userInput = process.argv[3];
-    spotify.search({ type: 'track', query: userInput + "" }, function(err, data) {
-        if (err) {
-          return console.log('Error occurred: ' + err);
-        }
-        console.log(data);
-    })    
+    spotify
+        .request('GET https://api.spotify.com/v1/search?q=bad&type=track')
+        .then(function(data) {
+            console.log(data); 
+        })
+        .catch(function(err) {
+            console.error('Error occurred: ' + err); 
+        });
 }
 
 function runOMDB() {
-    
+
 }
 
 // console.log(client);
