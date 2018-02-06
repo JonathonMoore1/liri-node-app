@@ -15,6 +15,7 @@ var spotify = new Spotify(keys.spotify);
 //search: function({ type: 'artist OR album OR track', 
 //query: 'My search query', limit: 20 }, callback);
 
+var nodeArgs = process.argv;
 var command = process.argv[2];
 var params = process.argv[3];
 
@@ -60,18 +61,51 @@ function runTwitter() {
 }
 
 function runSpotify() {
-    spotify
-        .request('GET https://api.spotify.com/v1/search?q=bad&type=track')
-        .then(function(data) {
-            console.log(data); 
-        })
-        .catch(function(err) {
-            console.error('Error occurred: ' + err); 
+    // var url = 'https://api.spotify.com/v1/search?type=track&q=name:';
+    // spotify
+    //     .request(url + params)
+    //     .then(function(data) {
+    //         console.log(data); 
+    //     })
+    //     .catch(function(err) {
+    //         console.error('Error occurred: ' + err); 
+    //     });
+        spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
+            if (err) {
+              return console.log('Error occurred: ' + err);
+            }
+          
+            console.log(JSON.parse(data)); 
         });
 }
 
 function runOMDB() {
+    var movieName = "";
+    for (i = 3; i < nodeArgs.length; i++) {
+        if (i > 3 && i < nodeArgs.length) {
+            movieName = movieName + "+" + nodeArgs[i];
+        } else {
+            movieName += nodeArgs[i];
+        }
+    }
+    var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    // console.log(queryURL);
+    request(queryURL, function(error, response, body) {
 
+        var data = JSON.parse(body);
+        
+        console.log("\n============================================\n");
+        console.log("\nTitle: " + data.Title);
+        console.log("\nRelease date: " + data.Released);
+        console.log("\nIMDB rating: " + data.Ratings[0].Value);
+        console.log("\nRotten Tomatoes rating: " + data.Ratings[1].Value);
+        console.log("\nCountry: " + data.Country);
+        console.log("\nLanguage: " + data.Language);
+        console.log("\nPlot summary: " + data.Plot);
+        console.log("\nStarring: " + data.Actors);
+        console.log("\n============================================\n");
+        
+    })
 }
 
 // console.log(client);
