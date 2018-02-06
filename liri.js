@@ -78,10 +78,17 @@ function runSpotify() {
             return console.log('Error occurred: ' + err);
         }
         
-        var prettyData = JSON.stringify(data, null, 2);
+        var artistPath = JSON.stringify(data.tracks.items[0].album.artists[0].name, null, 2);
+        var songPath = JSON.stringify(data.tracks.items[0].name);
+        var albumPath = JSON.stringify(data.tracks.items[0].album.name);
+        var previewPath = JSON.stringify(data.tracks.items[0].preview_url);
+
+        console.log(JSON.stringify(data, null, 2));
         console.log("\n============================================\n");
-       // console.log(prettyData); 
-        console.log(prettyData);
+        console.log("\nTrack title: " + songPath);
+        console.log("\nArtist: " + artistPath);
+        console.log("\nAlbum: " + albumPath);
+        console.log("\nSpotify preview: " + previewPath);
         console.log("\n============================================\n");
     });
 }
