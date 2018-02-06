@@ -4,29 +4,23 @@ var keys = require("./keys.js");
 // Twitter API Set-up
 var Twitter = require('twitter');
 var client = new Twitter(keys.twitter);
-// client.get(paths, params, callback);
-// client.post(path, params, callback);
-// client.stream(path, params, callback);
 
 // Spotify API Set-up
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
-// (Second line continues from first)
-//search: function({ type: 'artist OR album OR track', 
-//query: 'My search query', limit: 20 }, callback);
 
+// Globally declared variables
 var nodeArgs = process.argv;
-var command = process.argv[2];
-// var params = process.argv[3];
-
+var command = process.argv[2];;
 var request = require("request");
 var fs = require("fs");
 
-switch (command) {
 
-    case "test":
-        test();
-        break;
+// ==============================================================
+// Switch/Case takes input from command line and calls functions.
+// ==============================================================
+
+switch (command) {
 
     case "my-tweets":
         runTwitter();
@@ -45,9 +39,10 @@ switch (command) {
         break;
 }
 
-function test() {
-    console.log("Switch works");
-}
+
+// ===============================================
+// Functions. The rest is fairly self-explanatory.
+// ===============================================
 
 function runTwitter() {   
     var params = {screen_name: 'therealunclejo'};
@@ -63,6 +58,7 @@ function runTwitter() {
     });
 }
 
+// =========================================
 function runSpotify() {   
     var songName = "";
     for (i = 3; i < nodeArgs.length; i++) {
@@ -85,7 +81,6 @@ function runSpotify() {
         var albumPath = JSON.stringify(mainPath.album.name);
         var previewPath = JSON.stringify(mainPath.preview_url);
 
-        console.log(JSON.stringify(data, null, 2));
         console.log("\n============================================\n");
         console.log("\nTrack title: " + songPath);
         console.log("\nArtist: " + artistPath);
@@ -95,6 +90,7 @@ function runSpotify() {
     });
 }
 
+// =========================================
 function runOMDB() {
     var movieName = "";
     for (i = 3; i < nodeArgs.length; i++) {
@@ -123,6 +119,7 @@ function runOMDB() {
     })
 }
 
+// =========================================
 function fooBar() {
     fs.readFile('random.txt', 'utf8', function(err, data) {
         if (err) {
@@ -144,7 +141,6 @@ function fooBar() {
             var albumPath = JSON.stringify(mainPath.album.name);
             var previewPath = JSON.stringify(mainPath.preview_url);
     
-            //console.log(JSON.stringify(data, null, 2));
             console.log("\n============================================\n");
             console.log("\nTrack title: " + songPath);
             console.log("\nArtist: " + artistPath);
@@ -154,3 +150,7 @@ function fooBar() {
         });
     })
 }
+
+// =======
+// The End
+// =======
