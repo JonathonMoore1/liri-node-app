@@ -16,6 +16,17 @@ var request = require("request");
 var fs = require("fs");
 
 
+fs.appendFile('log.txt', nodeArgs.slice(2).toString() + "\n", function(err) {
+    if (err) {
+        console.log("ERROR");
+    } else {
+        console.log("Content added to log");
+    }
+})
+// for (i = 0; i < nodeArgs.length; i++) {
+    
+// }
+
 // ==============================================================
 // Switch/Case takes input from command line and calls functions.
 // ==============================================================
